@@ -3,7 +3,7 @@ use std::fs;
 
 const FREE_SPACE: usize = usize::MAX;
 
-fn compute_checksum(fs: &Vec<usize>) -> usize {
+fn compute_checksum(fs: &[usize]) -> usize {
     let checksum: usize = fs
         .iter()
         .enumerate()
@@ -13,7 +13,7 @@ fn compute_checksum(fs: &Vec<usize>) -> usize {
     checksum
 }
 
-fn p1_defrag(fs: &mut Vec<usize>) {
+fn p1_defrag(fs: &mut [usize]) {
     let mut start_idx = 0;
     let mut end_idx = fs.len() - 1;
     while start_idx < end_idx {
@@ -58,18 +58,21 @@ fn main() -> Result<(), Box<dyn Error>> {
     let mut fs_p2 = vec![FREE_SPACE; fs.len()];
     'block: for b in used.into_iter().rev() {
         for f in free.iter_mut() {
+            if b.0 < f.0 {
+                break;
+            }
             if b.1 <= f.1 {
-                fs_p2[f.0..f.0+b.1].fill(b.2);
+                fs_p2[f.0..f.0 + b.1].fill(b.2);
                 f.0 += b.1;
                 f.1 -= b.1;
                 continue 'block;
             }
         }
-        fs_p2[b.0..b.0+b.1].fill(b.2);
-
+        fs_p2[b.0..b.0 + b.1].fill(b.2);
     }
 
     let checksum = compute_checksum(&fs_p2);
+    // 8532024062389 too high
     println!("part2 sum: {checksum}");
 
     Ok(())
