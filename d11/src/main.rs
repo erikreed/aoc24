@@ -82,8 +82,8 @@ fn main() -> Result<(), Box<dyn Error>> {
         counts = new_counts;
     }
 
-    let loover_part_1 = counts.values().sum::<u64>();
-    println!("loover_part_1 1: {}", loover_part_1);
+    let pt2 = counts.values().sum::<u64>();
+    println!("pt2: {}", pt2);
 
     Ok(())
 }
